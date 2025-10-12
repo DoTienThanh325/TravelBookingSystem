@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package View;
+import Model.Guide;
+import DAO.GuideDAO;
 import Main.Main;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -91,6 +93,7 @@ class GuideSignIn extends JFrame {
 //        Các thông số về tour để chuỗi rỗng
         JButton btnSubmit = new JButton("Tiếp tục");
         btnSubmit.addActionListener(e -> {
+            Guide guide = new Guide();
             String name = txtName.getText();
             String birthday = txtBirthday.getText();
             String phone = txtPhone.getText();
@@ -121,9 +124,11 @@ class GuideSignIn extends JFrame {
                 statusLabel.setForeground(Color.RED);
                 return;
             }
+            GuideDAO guideDAO = new GuideDAO();
+            guide = guideDAO.setGuide(name, birthday, phone, email, Float.parseFloat(exp), langs.toString());
 //            Đoạn này sẽ đưa object Guide vào thay vì các giá trị rời rạc
 //              new BookinTour(Guide);
-            new BookingTour(name, birthday, phone, email, exp, langs.toString());
+            new BookingTour(guide);
         });
 
         panel.add(lblName);
@@ -149,7 +154,7 @@ class GuideSignIn extends JFrame {
 }
 
 class BookingTour extends JFrame {
-    public BookingTour(String name, String birthday, String phone, String email, String exp, String langs) {
+    public BookingTour(Guide guide) {
         setTitle("Chọn tour dẫn");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -159,11 +164,11 @@ class BookingTour extends JFrame {
         panel.setBorder(new EmptyBorder(15, 15, 15, 15));
 
         JLabel lblTour = new JLabel("Tên tour:");
-        String[] tours = { "Hà Nội - HCM", "Hà Nội - Đà Nẵng", "Hà Nội - Nha Trang" };
+        String[] tours = { "Hanoi-HCM", "Hanoi-Danang", "Hanoi-Nhatrang" };
         JComboBox<String> cbTour = new JComboBox<>(tours);
 
         JLabel lblDate = new JLabel("Ngày khởi hành:");
-        String[] dates = { "20/10/2025", "23/12/2025", "01/01/2026" };
+        String[] dates = { "2025-10-20", "2025-12-23", "2026-01-01" };
         JComboBox<String> cbDate = new JComboBox<>(dates);
 //        Từ tên và ngày khởi hành -> tourId 
 //          Set giá trị cho TourBooking của Object Guide
@@ -171,16 +176,34 @@ class BookingTour extends JFrame {
 
         JButton btnConfirm = new JButton("Xác nhận");
         btnConfirm.addActionListener(e -> {
+            guide.setTourBooking((String) cbTour.getSelectedItem() + " - " + (String) cbDate.getSelectedItem());
+
+            if (!new GuideDAO().guideCheck(guide)) {
+                JOptionPane.showMessageDialog(this,
+                        "❌️ Bạn không đủ điều kiện ngôn ngữ để dẫn tour này!",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else {
+                JOptionPane.showMessageDialog(this,
+                        "✅️ Bạn đủ điều kiện ngôn ngữ để dẫn tour này!",
+                        "Thành công",
+                        JOptionPane.INFORMATION_MESSAGE);
+                guide.setBookingState("Confirmed");
+                guide.setBookingDate(java.time.LocalDate.now().toString());
+                // Thêm chức năng add vào db sau 
+            }
             String tour = (String) cbTour.getSelectedItem();
             String date = (String) cbDate.getSelectedItem();
 
             JOptionPane.showMessageDialog(this,
-                    "Họ và tên: " + name +
-                            "\nNgày sinh: " + birthday +
-                            "\nSố điện thoại: " + phone +
-                            "\nEmail: " + email +
-                            "\nKinh nghiệm: " + exp + " năm" +
-                            "\nNgoại ngữ: " + langs +
+                    "Họ và tên: " + guide.getName() +
+                            "\nNgày sinh: " + guide.getBirthday() +
+                            "\nSố điện thoại: " + guide.getPhoneNumber() +
+                            "\nEmail: " + guide.getEmail() +
+                            "\nKinh nghiệm: " + guide.getGuideExperience() + " năm" +
+                            "\nNgoại ngữ: " + guide.getForeignLanguageAsString() +
                             "\nTên tour: " + tour +
                             "\nNgày khởi hành: " + date,
                     "Xác nhận dẫn tour",
