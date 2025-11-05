@@ -196,7 +196,7 @@ class BookingTour extends JFrame {
         TourDAO tourDao = new TourDAO();
 
         JLabel lblTour = new JLabel("Tên tour:");
-        String[] tours = tourDao.collectTourInfo("NOT FULL");
+        String[] tours = tourDao.collectTourGuideInfo("NOT FULL");
         JComboBox<String> cbTour = new JComboBox<>(tours);
 
         JLabel lblDate = new JLabel("Ngày khởi hành:");
@@ -269,9 +269,6 @@ class BookingTour extends JFrame {
 
             try {
                 tourId = GuideDAO.findTourId(tourName, date, numDays);
-                System.out.println("Tour: " + tourName + ", date: " + date + ", numDays: " + numDays);
-                System.out.println("Tour ID: " + tourId);
-
             } catch (ClassNotFoundException e1) {
                 e1.printStackTrace();
             }

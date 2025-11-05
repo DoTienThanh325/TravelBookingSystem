@@ -134,6 +134,27 @@ public class TourDAO {
         return TourNameArr;
     }
 
+    public String[] collectTourGuideInfo(String state) throws ClassNotFoundException {
+        ArrayList<String> arr = new ArrayList<>();
+        String sql = "select distinct tourName from TOUR where tourGuideState = ? ";
+        try (Connection conn = GetConnectionDAO.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);) {
+            ps.setString(1, state);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String tenTour = rs.getString("tourName");
+                    arr.add(tenTour);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error1");
+            e.printStackTrace();
+        }
+        String[] TourNameArr = arr.toArray(new String[0]);
+        return TourNameArr;
+    }
+
     // Hàm lấy dayStart
     public String[] collectTourStartDate(String tourName) throws ClassNotFoundException {
         ArrayList<String> arrStart = new ArrayList<>();
