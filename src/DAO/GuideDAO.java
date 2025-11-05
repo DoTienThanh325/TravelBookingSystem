@@ -124,6 +124,55 @@ public class GuideDAO {
         }
     }
 
+    // Lấy guideId
+    public static String findGuideId() throws ClassNotFoundException {
+        String GuideId = null;
+        try {
+            Connection con = GetConnectionDAO.getConnection();
+            String sql = "SELECT Id FROM guide ORDER BY Id DESC LIMIT 1";
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                GuideId = rs.getString("Id");
+            } else {
+                System.out.println("Không tìm thấy tour phù hợp.");
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Lỗi truy vấn findTourId: " + e.getMessage());
+        }
+        return GuideId;
+    }
+
+    // Xử lý bảng guideLanguage
+    public static void addGuideLanguage(Guide guide, String GuideId) throws ClassNotFoundException {
+        ArrayList<String> arr = guide.getForeignLanguage();
+        for (int i = 0; i < arr.size(); i++) {
+            try (Connection conn = GetConnectionDAO.getConnection()) {
+                String sql = "INSERT INTO guidelanguage (GuideId, foreignLanguage) VALUES (?, ?)";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+
+                stmt.setString(1, GuideId);
+                stmt.setString(2, arr.get(i));
+
+                int rows = stmt.executeUpdate();
+                if (rows > 0) {
+                    System.out.println("Thêm hướng dẫn viên thành công!");
+                } else {
+                    System.out.println("Không thể thêm hướng dẫn viên.");
+                }
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error to add guide language: " + e.getMessage());
+            }
+        }
+    }
+
     public static String check(Guide guide) throws SQLException, ClassNotFoundException {
         String dataExists = null;
         try (Connection conn = GetConnectionDAO.getConnection()) {

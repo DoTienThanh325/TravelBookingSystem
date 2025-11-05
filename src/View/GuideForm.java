@@ -196,7 +196,7 @@ class BookingTour extends JFrame {
         TourDAO tourDao = new TourDAO();
 
         JLabel lblTour = new JLabel("Tên tour:");
-        String[] tours = tourDao.collectTourGuideInfo("NOT FULL");
+        String[] tours = tourDao.collectTourInfo("NOT FULL");
         JComboBox<String> cbTour = new JComboBox<>(tours);
 
         JLabel lblDate = new JLabel("Ngày khởi hành:");
@@ -340,6 +340,8 @@ class BookingTour extends JFrame {
                 // Thêm chức năng add vào db sau
                 try {
                     GuideDAO.addGuide(guide);
+                    String GuideId = GuideDAO.findGuideId();
+                    GuideDAO.addGuideLanguage(guide, GuideId);
                 } catch (ClassNotFoundException e1) {
                     e1.printStackTrace();
                 }

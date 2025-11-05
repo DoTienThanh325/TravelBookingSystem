@@ -61,9 +61,6 @@ CREATE TABLE ForeignLanguage (
 -- Tạo bảng Guide Language
 CREATE TABLE GuideLanguage (
 	GuideId VARCHAR(10),
-    foreignLanguage VARCHAR(255),
-    PRIMARY KEY (GuideId, foreignLanguage),
-    FOREIGN KEY (GuideId) REFERENCES Guide(Id),
-    FOREIGN KEY (foreignLanguage) REFERENCES ForeignLanguage(language)
+    foreignLanguage VARCHAR(255)
 );
 

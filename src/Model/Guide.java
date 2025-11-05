@@ -5,7 +5,7 @@ import java.util.*;
 public class Guide extends Human {
     private float GuideExperience;
     private ArrayList<String> ForeignLanguage;
-    
+
     public Guide() {
         super();
         this.GuideExperience = 0.0F;
@@ -21,16 +21,16 @@ public class Guide extends Human {
     }
 
     public ArrayList<String> getForeignLanguage() {
-        return ForeignLanguage;
+        return this.ForeignLanguage;
     }
 
     public void setForeignLanguage(ArrayList<String> ForeignLanguage) {
         this.ForeignLanguage = ForeignLanguage;
     }
-    
+
     public String getForeignLanguageAsString() {
         StringBuilder Langs = new StringBuilder();
-        for(String lang : this.ForeignLanguage) {
+        for (String lang : this.ForeignLanguage) {
             Langs.append(lang).append(", ");
         }
 
