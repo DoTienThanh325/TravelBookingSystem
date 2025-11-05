@@ -113,16 +113,19 @@ public class TourDAO {
     }
 
     // Hàm lấy tên tour
-    public String[] collectTourInfo() throws ClassNotFoundException {
+    public String[] collectTourInfo(String state) throws ClassNotFoundException {
         ArrayList<String> arr = new ArrayList<>();
-        String sql = "select distinct tourName from TOUR where tourState = 'Not Full' ";
+        String sql = "select distinct tourName from TOUR where tourState = ? ";
         try (Connection conn = GetConnectionDAO.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                String tenTour = rs.getString("tourName");
-                arr.add(tenTour);
+                PreparedStatement ps = conn.prepareStatement(sql);) {
+            ps.setString(1, state);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String tenTour = rs.getString("tourName");
+                    arr.add(tenTour);
+                }
             }
+
         } catch (SQLException e) {
             System.err.println("Error1");
             e.printStackTrace();

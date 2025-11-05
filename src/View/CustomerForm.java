@@ -122,7 +122,7 @@ class TourWindow extends JFrame {
         TourDAO tourDao = new TourDAO();
 
         JLabel lblTour = new JLabel("Tên tour:");
-        String[] tours = tourDao.collectTourInfo();
+        String[] tours = tourDao.collectTourInfo("Not Full");
         JComboBox<String> cbTour = new JComboBox<>(tours);
 
         JLabel lblDate = new JLabel("Ngày khởi hành:");
@@ -286,7 +286,7 @@ class TourWindow extends JFrame {
             lblTourState.setForeground(new Color(0, 102, 0)); // Màu xanh lá cây đậm
             tour.setCurrentPassengers(selectedNumber);
             tour.setTourState(1);
-    
+
             customer.setTourBooking(tourId);
             customer.setBookingDate(java.time.LocalDate.now().toString());
             customer.setNumberOfCustomers(selectedNumber);

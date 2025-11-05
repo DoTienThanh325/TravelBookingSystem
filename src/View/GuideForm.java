@@ -196,7 +196,7 @@ class BookingTour extends JFrame {
         TourDAO tourDao = new TourDAO();
 
         JLabel lblTour = new JLabel("Tên tour:");
-        String[] tours = tourDao.collectTourInfo();
+        String[] tours = tourDao.collectTourInfo("NOT FULL");
         JComboBox<String> cbTour = new JComboBox<>(tours);
 
         JLabel lblDate = new JLabel("Ngày khởi hành:");
