@@ -280,7 +280,8 @@ class TourWindow extends JFrame {
                     JOptionPane.WARNING_MESSAGE);
             System.out.println(tour.getTourState());
             System.out.println(tour.getCurrentPassengers());
-            tour.setTourState(0 - selectedNumber);
+            int newSelectedNumber = 0 - selectedNumber;
+            tour.setTourState(newSelectedNumber); // Hoàn tác lại số người hiện tại
         } else {
             lblTourState.setForeground(new Color(0, 102, 0)); // Màu xanh lá cây đậm
             tour.setCurrentPassengers(selectedNumber);
